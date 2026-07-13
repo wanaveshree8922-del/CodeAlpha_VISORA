@@ -32,35 +32,35 @@ It transforms live webcam video into intelligent insights — detecting objects 
 
 ## 🚀 Setup & Installation
 
-**1. Clone the repository**
+###1. Clone the repository**
 ```bash
 git clone https://github.com/wanaveshree8922-del/CodeAlpha_VISORA.git
 cd CodeAlpha_VISORA
 ```
 
-**2. Create a virtual environment (Python 3.11 recommended)**
+###2. Create a virtual environment (Python 3.11 recommended)**
 ```bash
 python -m venv venv
 venv\Scripts\activate      # Windows
 source venv/bin/activate   # macOS/Linux
 ```
 
-**3. Install dependencies**
+###3. Install dependencies**
 ```bash
 pip install ultralytics deep-sort-realtime flask opencv-python "setuptools<81"
 ```
 
-**4. Run the app**
+###4. Run the app**
 ```bash
 python app.py
 ```
 
-**5. Open in your browser**
+###5. Open in your browser**
 ```
 http://127.0.0.1:5000
 ```
 
-## 📁 Project Structure
+### 📁 Project Structure
 
 ```
 CodeAlpha_VISORA/
