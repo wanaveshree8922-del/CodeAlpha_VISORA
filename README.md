@@ -86,4 +86,4 @@ CodeAlpha_VISORA/
 Built using [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) and [deep-sort-realtime](https://github.com/levan92/deep_sort_realtime), as part of the **CodeAlpha Artificial Intelligence Internship**.
 
 
-##Author: Shreyas
+## Author: Shreyas
