@@ -1,0 +1,32 @@
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# YOLO model weights (large file, auto-downloads on first run)
+*.pt
+
+# Flask
+instance/
+.flaskenv
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+# Custom fonts (licensing - not for redistribution)
+static/fonts/
