@@ -1,6 +1,6 @@
-```markdown
-# CodeAlpha_VISORA
-``` 
+
+## CodeAlpha_VISORA
+ 
 **VISORA** is a real-time object detection and tracking web application built using YOLOv8 and DeepSORT, developed as part of my **CodeAlpha AI Internship**.
 
 It transforms live webcam video into intelligent insights — detecting objects in real time and tracking each one with a persistent ID as it moves across the frame, all wrapped in a clean, cinematic web interface.
@@ -85,6 +85,5 @@ CodeAlpha_VISORA/
 
 Built using [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) and [deep-sort-realtime](https://github.com/levan92/deep_sort_realtime), as part of the **CodeAlpha Artificial Intelligence Internship**.
 
----
+
 **Author:** Shreyas
-```
