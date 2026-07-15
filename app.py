@@ -1,9 +1,16 @@
+import os
 from flask import Flask, render_template, Response, request
+from werkzeug.utils import secure_filename
 import cv2
 from ultralytics import YOLO
 from deep_sort_realtime.deepsort_tracker import DeepSort
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = 'static/uploads'
+PROCESSED_FOLDER = 'static/processed'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
 # Load YOLOv8 model (nano version = fastest, good for real-time)
 model = YOLO("yolov8n.pt")
@@ -17,30 +24,31 @@ def generate_frames():
     global camera
     camera = cv2.VideoCapture(0)
 
+    frame_count = 0
+    last_tracks = []
+
     while True:
         success, frame = camera.read()
         if not success:
             break
 
-        # Run YOLO detection
-        results = model(frame, verbose=False)[0]
+        frame = cv2.resize(frame, (640, 480))
+        frame_count += 1
 
-        detections = []
-        for box in results.boxes:
-            x1, y1, x2, y2 = box.xyxy[0].tolist()
-            conf = box.conf[0].item()
-            cls = int(box.cls[0].item())
-            label = model.names[cls]
+        if frame_count % 3 == 0:  # only run detection every 3rd frame
+            results = model(frame, verbose=False)[0]
+            detections = []
+            for box in results.boxes:
+                x1, y1, x2, y2 = box.xyxy[0].tolist()
+                conf = box.conf[0].item()
+                cls = int(box.cls[0].item())
+                label = model.names[cls]
+                if conf > 0.5:
+                    w, h = x2 - x1, y2 - y1
+                    detections.append(([x1, y1, w, h], conf, label))
+            last_tracks = tracker.update_tracks(detections, frame=frame)
 
-            if conf > 0.5:
-                w, h = x2 - x1, y2 - y1
-                detections.append(([x1, y1, w, h], conf, label))
-
-        # Update tracker
-        tracks = tracker.update_tracks(detections, frame=frame)
-
-        # Draw boxes + IDs
-        for track in tracks:
+        for track in last_tracks:
             if not track.is_confirmed():
                 continue
             track_id = track.track_id
@@ -50,8 +58,8 @@ def generate_frames():
             cv2.rectangle(frame, (int(l), int(t)), (int(r), int(b)), (0, 255, 0), 2)
             cv2.putText(frame, f"{label} ID:{track_id}", (int(l), int(t) - 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-
-        # Encode frame as JPEG for streaming
+         
+         # Encode frame as JPEG for streaming
         ret, buffer = cv2.imencode('.jpg', frame)
         frame_bytes = buffer.tobytes()
 
@@ -93,7 +101,7 @@ def upload_video():
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 
     local_tracker = DeepSort(max_age=30)
@@ -103,6 +111,7 @@ def upload_video():
         if not success:
             break
 
+        frame = cv2.resize(frame, (640, 480))  # Resize for faster processing
         results = model(frame, verbose=False)[0]
         detections = []
         for box in results.boxes:

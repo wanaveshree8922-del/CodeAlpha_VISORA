@@ -47,6 +47,7 @@
 
 <div id="camera-screen">
     <img id="video-feed" src="" alt="Live detection feed">
+    <video id="processed-video-feed" controls style="display:none; max-width:100%; max-height:100%; border-radius:4px;"></video>
     <button id="exit-btn" onclick="closeCamera()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -61,7 +62,51 @@
     function closeCamera() {
         document.getElementById('camera-screen').classList.remove('active');
         document.getElementById('video-feed').src = '';
+        document.getElementById('video-feed').style.display = 'block';
+        const videoEl = document.getElementById('processed-video-feed');
+        videoEl.pause();
+        videoEl.src = '';
+        videoEl.style.display = 'none';
         fetch('/stop');
+    }
+
+    function uploadVideo(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('video', file);
+
+        const btn = document.getElementById('upload-video-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Processing...';
+        btn.style.pointerEvents = 'none';
+
+        fetch('/upload_video', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.innerHTML = originalText;
+            btn.style.pointerEvents = 'auto';
+
+            if (data.video_url) {
+                document.getElementById('video-feed').style.display = 'none';
+                const videoEl = document.getElementById('processed-video-feed');
+                videoEl.src = data.video_url;
+                videoEl.style.display = 'block';
+                videoEl.play();
+                document.getElementById('camera-screen').classList.add('active');
+            } else {
+                alert('Something went wrong processing the video.');
+            }
+        })
+        .catch(error => {
+            btn.innerHTML = originalText;
+            btn.style.pointerEvents = 'auto';
+            alert('Upload failed: ' + error);
+        });
     }
 </script>
 

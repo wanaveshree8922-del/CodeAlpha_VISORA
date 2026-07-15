@@ -55,13 +55,13 @@ nav {
 }
 
 .logo {
-    font-family: 'Montaga', serif;
+    font-family: 'Orvelia', serif;
     font-size: 1.5rem;
-    letter-spacing: -0.5px;
+    letter-spacing: 1px;
     color: #ECEAE2;
 }
 .logo sup {
-    font-size: 0.9em;
+    font-size: 0.7em;
     margin-left: 2px;
     font-family: 'Inter', sans-serif;
 }
