@@ -75,14 +75,23 @@ pip install ultralytics deep-sort-realtime flask opencv-python "setuptools<81"
 
 ---
 
-**4. Run the app**
+**4. Required: OpenH264 codec**  
+``` bash
+This project uses H.264 video encoding for browser-compatible output. Download the DLL from:  
+https://github.com/cisco/openh264/releases (version 2.5.0)
+
+Download `openh264-2.5.0-win64.dll.bz2`, extract it, and place `openh264-2.5.0-win64.dll` in the project root (same folder as `app.py`).
+```
+---
+
+**5. Run the app**
 ```bash
 python app.py
 ```
 
 ---
 
-**5. Open in your browser**
+**6. Open in your browser**
 ```
 http://127.0.0.1:5000
 ```

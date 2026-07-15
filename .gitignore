@@ -30,3 +30,5 @@ Thumbs.db
 *.log
 # Custom fonts (licensing - not for redistribution)
 static/fonts/
+# OpenH264 codec DLL (download separately - see README)
+openh264-2.5.0-win64.dll

@@ -98,8 +98,7 @@ def upload_video():
 
     cap = cv2.VideoCapture(input_path)
     fps = cap.get(cv2.CAP_PROP_FPS) or 20
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    width, height = 640, 480  # Resize for faster processing
 
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
     out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
